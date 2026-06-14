@@ -2,69 +2,65 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>China Medical Verification | 中国医疗验证系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Official Medical Portal</title>
     <style>
-        body { font-family: 'Segoe UI', Arial; background: #eef2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); width: 360px; text-align: center; border-top: 10px solid #c8102e; }
-        h2 { color: #c8102e; font-size: 22px; margin-bottom: 5px; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #c8102e; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        #loader { display: none; margin: 20px 0; color: #c8102e; font-weight: bold; }
-        .report-box { position: relative; margin-top: 20px; border: 2px solid #333; padding: 5px; }
-        .stamp { position: absolute; top: 10px; right: 10px; border: 3px solid #000080; color: #000080; padding: 8px; font-weight: bold; transform: rotate(-15deg); opacity: 0.7; }
-        .footer { font-size: 11px; color: #777; margin-top: 20px; }
+        body { font-family: 'Segoe UI', Arial; background: #eef2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; touch-action: manipulation; }
+        .container { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; border-top: 8px solid #c8102e; box-sizing: border-box; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; }
+        button { width: 100%; padding: 12px; background: #c8102e; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        
+        #loader { display: none; margin: 20px 0; font-weight: bold; color: #c8102e; }
+        .report-box { border: 2px solid #333; padding: 10px; margin-top: 15px; }
+        table { width: 100%; margin-top: 15px; border-collapse: collapse; font-size: 13px; }
+        th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
+        th { background: #f8f8f8; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Medical Verification</h2>
-        <input type="text" id="passport" placeholder="Passport Number">
-        <input type="text" id="mobile" placeholder="Mobile Number">
-        <button onclick="checkReport()">Verify / 验证</button>
-        <div id="loader">Processing Request...</div>
-        <div id="result"></div>
-        <div class="footer">
-            System Access Count: 48,291 | Official Authentication Platform
-        </div>
-    </div>
 
-    <script>
-    let attempts = 0;
-    function checkReport() {
-        if(attempts >= 3) {
-            alert("Access Suspended for 30 minutes due to too many failed attempts.");
-            return;
+<div class="container">
+    <h2>Medical Report System</h2>
+    <div style="font-size: 12px; color: #666;">中国医疗验证系统</div>
+    <input type="text" id="passport" placeholder="Passport Number">
+    <input type="text" id="mobile" placeholder="Mobile Number">
+    <button onclick="checkReport()">Verify / 验证</button>
+    
+    <div id="loader">Processing... 正在核实...</div>
+    <div id="result"></div>
+</div>
+
+<script>
+function checkReport() {
+    let loader = document.getElementById("loader");
+    let resultDiv = document.getElementById("result");
+    loader.style.display = "block";
+    resultDiv.innerHTML = "";
+
+    setTimeout(() => {
+        loader.style.display = "none";
+        let p = document.getElementById("passport").value;
+        let m = document.getElementById("mobile").value;
+        
+        if(p === "A11758023" && m === "01407873051") {
+            resultDiv.innerHTML = `
+                <div class="report-box">
+                    <img src="https://i.imgur.com/nQeMY9y.jpeg" style="width:100%;">
+                    <table>
+                        <tr><th>Test / 项目</th><th>Result / 结果</th></tr>
+                        <tr><td>ECG / 心电图</td><td>Normal / 正常</td></tr>
+                        <tr><td>Syphilis / 梅毒</td><td>Negative / 阴性</td></tr>
+                        <tr><td>HIV / 艾滋病</td><td>Negative / 阴性</td></tr>
+                        <tr><td>Chest X-ray / 胸片</td><td>Clear / 清晰</td></tr>
+                    </table>
+                </div>
+                <button style="margin-top:15px; background:green;" onclick="alert('Downloading PDF...')">Download PDF</button>
+            `;
+        } else {
+            resultDiv.innerHTML = '<p style="color:red;">Record not found!</p>';
         }
-        let loader = document.getElementById("loader");
-        let resultDiv = document.getElementById("result");
-        loader.style.display = "block";
-        resultDiv.innerHTML = "";
-
-        setTimeout(() => {
-            loader.style.display = "none";
-            let p = document.getElementById("passport").value;
-            let m = document.getElementById("mobile").value;
-            let users = [
-                { pass: "A11758023", mob: "01407873051", img: "https://i.imgur.com/nQeMY9y.jpeg" },
-                { pass: "A22231008", mob: "01794492265", img: "https://i.imgur.com/ibqu4TL.jpeg" }
-            ];
-
-            let found = users.find(u => u.pass === p && u.mob === m);
-            if(found) {
-                resultDiv.innerHTML = `
-                    <div class="report-box">
-                        <img src="${found.img}" style="width:100%;">
-                        <div class="stamp">VERIFIED</div>
-                    </div>
-                    <p style="font-size:12px;">Ref: CN-${Math.floor(Math.random()*999999)}</p>
-                    <button style="background:green;" onclick="alert('Downloading PDF...')">Download Official Report (PDF)</button>
-                `;
-            } else {
-                attempts++;
-                resultDiv.innerHTML = '<p style="color:red; font-weight:bold;">Record not found! Attempts: ' + attempts + '/3</p>';
-            }
-        }, 1500);
-    }
-    </script>
+    }, 2000);
+}
+</script>
 </body>
 </html>
