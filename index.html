@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Medical Status Portal | 医疗检查报告系统</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 350px; text-align: center; }
+        h2 { color: #004a99; margin-bottom: 5px; }
+        h4 { color: #555; margin-top: 0; font-weight: normal; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #004a99; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
+        #result { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Medical Status Portal</h2>
+        <h4>医疗检查报告系统</h4>
+        <input type="text" id="passport" placeholder="Passport Number">
+        <input type="text" id="mobile" placeholder="Mobile Number">
+        <button onclick="showReport()">Submit / 提交</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+    function showReport() {
+        let p = document.getElementById("passport").value;
+        let m = document.getElementById("mobile").value;
+        let resultDiv = document.getElementById("result");
+        
+        let users = [
+            { pass: "A11758023", mob: "01407873051", img: "https://i.imgur.com/nQeMY9y.jpeg" },
+            { pass: "A22231008", mob: "01794492265", img: "https://i.imgur.com/ibqu4TL.jpeg" }
+        ];
+
+        let found = users.find(u => u.pass === p && u.mob === m);
+
+        if(found) {
+            resultDiv.innerHTML = '<p style="color:green; font-weight:bold;">Status: Passed / 合格</p>' +
+            '<img src="' + found.img + '" style="width:100%; border:1px solid #ddd; border-radius:4px;">';
+        } else {
+            resultDiv.innerHTML = '<p style="color:red;">Record not found / 未找到记录</p>';
+        }
+    }
+    </script>
+</body>
+</html>
