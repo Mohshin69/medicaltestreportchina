@@ -11,12 +11,9 @@
         .menu-btn { font-size: 25px; cursor: pointer; }
         .menu-content { display: none; background: white; border-bottom: 3px solid #cc0000; padding: 10px; }
         .menu-content a { display: block; padding: 12px; text-decoration: none; color: #333; border-bottom: 1px solid #eee; font-weight: bold; }
-        
         .container { padding: 20px; max-width: 450px; margin: auto; background: white; }
         input, button { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         button { background: #cc0000; color: white; font-weight: bold; cursor: pointer; }
-        
-        /* পূর্ণাঙ্গ রিপোর্ট লেআউট */
         .report-box { margin-top: 25px; border: 2px solid #333; padding: 15px; background: white; position: relative; }
         .stamp { position: absolute; top: 120px; right: 20px; border: 3px solid #000080; color: #000080; padding: 10px; font-weight: bold; transform: rotate(-15deg); opacity: 0.5; z-index: 10; pointer-events: none; }
         .table-area { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px; }
@@ -67,16 +64,19 @@ function checkReport() {
         let p = document.getElementById("passport").value;
         let m = document.getElementById("mobile").value;
         
-        // উভয় ইউজারের তথ্য এখানে চেক হচ্ছে
-        let isUser1 = (p === "A11758023" && m === "01407873051");
-        let isUser2 = (p === "A22231008" && m === "01794492265");
+        // প্রতিটি ইউজারের জন্য আলাদা ডাটা সেট
+        let users = [
+            { pass: "A11758023", mob: "01407873051", img: "https://i.imgur.com/nQeMY9y.jpeg" },
+            { pass: "A22231008", mob: "01794492265", img: "https://i.imgur.com/ibqu4TL.jpeg" }
+        ];
         
-        if(isUser1 || isUser2) {
-            let imgLink = isUser1 ? "https://i.imgur.com/nQeMY9y.jpeg" : "https://i.imgur.com/ibqu4TL.jpeg";
+        let found = users.find(u => u.pass === p && u.mob === m);
+        
+        if(found) {
             res.innerHTML = `
                 <div class="report-box">
                     <div class="stamp">VERIFIED</div>
-                    <img src="${imgLink}" style="width:100%; border:1px solid #ccc;">
+                    <img src="${found.img}" style="width:100%; border:1px solid #ccc;">
                     <table class="table-area">
                         <tr><th>项目 (Test)</th><th>结果 (Result)</th></tr>
                         <tr><td>心电图 (ECG)</td><td>Normal / 正常</td></tr>
