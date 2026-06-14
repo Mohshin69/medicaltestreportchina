@@ -2,79 +2,84 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>China Health Commission Verification</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>China Medical Portal | 中国医疗</title>
     <style>
-        body { font-family: 'Segoe UI', Arial; background: #f4f4f4; margin: 0; }
+        body { font-family: 'Arial', sans-serif; background: #f4f4f4; margin: 0; }
         .header { background: #cc0000; color: white; padding: 15px; display: flex; align-items: center; justify-content: space-between; }
-        .logo-img { width: 40px; background: white; border-radius: 50%; padding: 2px; }
-        .menu-btn { font-size: 24px; cursor: pointer; }
-        .container { padding: 20px; max-width: 450px; margin: auto; background: white; border-radius: 0 0 10px 10px; }
+        .logo-box { display: flex; align-items: center; gap: 10px; }
+        .menu-btn { font-size: 25px; cursor: pointer; }
+        .menu-content { display: none; background: white; border-top: 2px solid #cc0000; padding: 10px; text-align: center; }
+        .menu-content a { display: block; padding: 10px; text-decoration: none; color: #333; border-bottom: 1px solid #eee; }
+        
+        .container { padding: 20px; max-width: 450px; margin: auto; background: white; }
         input, button { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; box-sizing: border-box; }
-        button { background: #cc0000; color: white; border: none; font-weight: bold; cursor: pointer; }
+        button { background: #cc0000; color: white; border: none; font-weight: bold; }
         
-        .report-box { position: relative; margin-top: 20px; border: 2px solid #333; padding: 10px; background: white; }
-        .watermark { position: absolute; top: 40%; left: 10%; color: rgba(200,0,0,0.1); font-size: 30px; transform: rotate(-45deg); font-weight: bold; pointer-events: none; }
-        .stamp { position: absolute; top: 10px; right: 10px; border: 3px solid #000080; color: #000080; padding: 5px; font-weight: bold; transform: rotate(-15deg); opacity: 0.6; }
-        
-        .info-box { font-size: 12px; color: #555; margin-top: 20px; border-top: 2px solid #cc0000; padding-top: 10px; }
-        .rules { text-align: left; margin-top: 10px; font-size: 11px; color: #333; }
+        /* লোডিং ও রিপোর্ট স্টাইল */
+        #loader { display: none; text-align: center; color: #cc0000; font-weight: bold; margin: 20px 0; }
+        .report-box { margin-top: 20px; border: 2px solid #333; padding: 10px; position: relative; }
+        .stamp { position: absolute; top: 15px; right: 15px; border: 3px solid #000080; color: #000080; padding: 5px; font-weight: bold; transform: rotate(-15deg); opacity: 0.6; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <img src="https://cdn-icons-png.flaticon.com/512/3062/3062634.png" class="logo-img">
-    <div style="font-weight:bold;">中国医疗检查中心</div>
-    <div class="menu-btn">☰</div>
+    <div class="logo-box">
+        <img src="https://cdn-icons-png.flaticon.com/512/3062/3062634.png" width="40" style="background:white; border-radius:50%">
+        <strong>中国医疗检查中心</strong>
+    </div>
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+</div>
+
+<div id="menu" class="menu-content">
+    <a href="#">首页 (Home)</a>
+    <a href="#">医院简介 (About)</a>
+    <a href="#">医疗法规 (Rules)</a>
+    <a href="#">联系我们 (Contact)</a>
 </div>
 
 <div class="container">
-    <h3 style="text-align:center;">Official Verification Portal / 官方验证系统</h3>
-    <input type="text" id="passport" placeholder="Passport No / 护照号码">
-    <input type="text" id="mobile" placeholder="Mobile No / 手机号码">
-    <button onclick="checkReport()">Verify / 验证</button>
-    
+    <input type="text" id="passport" placeholder="Passport No (护照号码)">
+    <input type="text" id="mobile" placeholder="Mobile No (手机号码)">
+    <button onclick="checkReport()">立即查询 (Verify)</button>
+    <div id="loader">正在加载数据... (Loading...)</div>
     <div id="result"></div>
-
-    <div class="info-box">
-        <h4>About Us / 关于我们</h4>
-        <p>Providing high-quality medical verification services for international travelers. / 为国际旅行者提供高质量的医疗验证服务。</p>
-        
-        <h4>Rules & Regulations / 医疗法规</h4>
-        <div class="rules">
-            1. Report is mandatory for entry. / 入境必须持有健康报告。<br>
-            2. Forgery is a legal offense. / 伪造报告属于违法行为。<br>
-            3. Verification is valid for 90 days. / 验证有效期为90天。
-        </div>
-
-        <div style="margin-top:15px; font-weight:bold;">📞 Hotline: +86-10-88889999</div>
-    </div>
 </div>
 
 <script>
+function toggleMenu() {
+    let m = document.getElementById("menu");
+    m.style.display = (m.style.display === "block") ? "none" : "block";
+}
+
 function checkReport() {
+    let loader = document.getElementById("loader");
     let res = document.getElementById("result");
-    let p = document.getElementById("passport").value;
-    let m = document.getElementById("mobile").value;
+    loader.style.display = "block";
+    res.innerHTML = "";
     
-    if(p === "A11758023" && m === "01407873051") {
-        res.innerHTML = `
-            <div class="report-box">
-                <div class="watermark">OFFICIAL</div>
-                <div class="stamp">VERIFIED</div>
-                <img src="https://i.imgur.com/nQeMY9y.jpeg" style="width:100%;">
-                <table style="width:100%; border-collapse:collapse; margin-top:10px; font-size:13px;">
-                    <tr><th>Test / 项目</th><th>Result / 结果</th></tr>
-                    <tr><td>ECG / 心电图</td><td>Normal / 正常</td></tr>
-                    <tr><td>Syphilis / 梅毒</td><td>Negative / 阴性</td></tr>
-                    <tr><td>HIV / 艾滋病</td><td>Negative / 阴性</td></tr>
-                </table>
-            </div>
-        `;
-    } else {
-        res.innerHTML = '<p style="color:red; text-align:center;">No Record Found / 未找到记录</p>';
-    }
+    setTimeout(() => {
+        loader.style.display = "none";
+        let p = document.getElementById("passport").value;
+        let m = document.getElementById("mobile").value;
+        
+        if(p === "A11758023" && m === "01407873051") {
+            res.innerHTML = `
+                <div class="report-box">
+                    <div class="stamp">VERIFIED</div>
+                    <img src="https://i.imgur.com/nQeMY9y.jpeg" style="width:100%;">
+                    <div style="font-size:12px; margin-top:10px;">
+                        <b>Test:</b> ECG, Syphilis, HIV, X-ray<br>
+                        <b>Status:</b> PASSED / 合格
+                    </div>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=Verified" style="margin-top:10px;">
+                </div>
+            `;
+        } else {
+            res.innerHTML = '<p style="color:red; text-align:center;">未找到记录 (No Record)</p>';
+        }
+    }, 2000);
 }
 </script>
 </body>
